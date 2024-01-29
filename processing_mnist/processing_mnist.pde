@@ -81,6 +81,7 @@ public void mouseReleased(){
   }
   PImage img = createImage(28, 28, ALPHA);
   img.pixels = imgBitmap;
-  //println(imgBitmap);
   img.save("drop.png");
+  String[] ans = fetchBash(new String[]{"python3",sketchPath()+"/main.py"});
+  println(ans[0]);
 }

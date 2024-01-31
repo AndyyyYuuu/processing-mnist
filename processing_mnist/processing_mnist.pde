@@ -2,6 +2,7 @@ import java.io.*;
 
 public static String[] fetchBash(String[] command){
   Process process = exec(command);
+  
   try{
     process.waitFor();
   } catch (InterruptedException e){
@@ -54,13 +55,25 @@ public void drop(){
 public void setup(){
   size(640, 640);
   background(0);
+  Process p1 = exec(new String[]{"/Library/Frameworks/Python.framework/Versions/3.11/bin/pip", "install", "torch"});
+  try{
+    p1.waitFor();
+  } catch (InterruptedException e){
+    e.printStackTrace();
+  }
+  Process p2 = exec(new String[]{"/Library/Frameworks/Python.framework/Versions/3.11/bin/pip", "install", "numpy"});
+  try{
+    p2.waitFor();
+  } catch (InterruptedException e){
+    e.printStackTrace();
+  }
   drop();
 }
 
 public void draw(){
   noFill();
   stroke(255);
-  strokeWeight(20);
+  strokeWeight(PIXEL_SZ*2);
   rect(40, 40, CANVAS_SZ, CANVAS_SZ);
   for (int x=0; x<bitmap.length; x++){
     for (int y=0; y<bitmap[0].length; y++){
@@ -87,7 +100,7 @@ public void draw(){
 
 public void mouseReleased(){
   drop();
-  String[] command = new String[]{"python3", "/Users/andyyu/Desktop/Coding/Processing/processing-mnist/processing_mnist/main.py"};//sketchPath()+"/main.py"}; 
+  String[] command = new String[]{"python3", sketchPath()+"/main.py"};//sketchPath()+"/main.py"}; 
   println(command);
   String[] ans = fetchBash(command);
   println(ans[0]);

@@ -40,16 +40,28 @@ double[][] bitmap = new double[BITMAP_SZ][BITMAP_SZ];
 
 PImage img;
 
+public void drop(){
+  int[] imgBitmap = new int[BITMAP_SZ*BITMAP_SZ];
+  for (int i=0; i<BITMAP_SZ*BITMAP_SZ; i++){
+    int a = color(min(255,(int)(bitmap[i%BITMAP_SZ][i/BITMAP_SZ]*255)));
+    imgBitmap[i] = a;
+  }
+  PImage img = createImage(28, 28, ALPHA);
+  img.pixels = imgBitmap;
+  img.save("drop.png");
+}
+
 public void setup(){
   size(640, 640);
   background(0);
+  drop();
 }
 
 public void draw(){
   noFill();
   stroke(255);
   strokeWeight(20);
-  rect(40, 40, 560, 560);
+  rect(40, 40, CANVAS_SZ, CANVAS_SZ);
   for (int x=0; x<bitmap.length; x++){
     for (int y=0; y<bitmap[0].length; y++){
       fill((float)(bitmap[x][y]*255));
@@ -74,14 +86,9 @@ public void draw(){
 }
 
 public void mouseReleased(){
-  int[] imgBitmap = new int[BITMAP_SZ*BITMAP_SZ];
-  for (int i=0; i<BITMAP_SZ*BITMAP_SZ; i++){
-    int a = color(min(255,(int)(bitmap[i%BITMAP_SZ][i/BITMAP_SZ]*255)));
-    imgBitmap[i] = a;
-  }
-  PImage img = createImage(28, 28, ALPHA);
-  img.pixels = imgBitmap;
-  img.save("drop.png");
-  String[] ans = fetchBash(new String[]{"python3",sketchPath()+"/main.py"});
+  drop();
+  String[] command = new String[]{"python3", "/Users/andyyu/Desktop/Coding/Processing/processing-mnist/processing_mnist/main.py"};//sketchPath()+"/main.py"}; 
+  println(command);
+  String[] ans = fetchBash(command);
   println(ans[0]);
 }

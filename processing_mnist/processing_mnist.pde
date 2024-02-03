@@ -1,11 +1,23 @@
 import java.io.*;
 
 public static String[] fetchBash(String[] command){
-  Process process = exec(command);
+  Process process;
+  try{
+    process = exec(command);
+  } catch (RuntimeException e){
+    e.printStackTrace();
+    return null;
+  }
   
   try{
-    process.waitFor();
-  } catch (InterruptedException e){
+    println(process.waitFor());
+    String line;
+    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
+    while ((line = errorReader.readLine()) != null) {
+      println(line);
+    }
+
+  } catch (InterruptedException | IOException e){
     e.printStackTrace();
     return null;
   }
@@ -52,21 +64,33 @@ public void drop(){
   img.save("drop.png");
 }
 
+private void printProcessOutput(Process process, String commandDescription) {
+  println(commandDescription + " Output:");
+  try {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    String line;
+    while ((line = reader.readLine()) != null) {
+      println(line);
+    }
+    process.waitFor();
+  } catch (Exception e) {
+    e.printStackTrace();
+  }
+}
+
 public void setup(){
   size(640, 640);
   background(0);
-  Process p1 = exec(new String[]{"/Library/Frameworks/Python.framework/Versions/3.11/bin/pip", "install", "torch"});
+  
+  /*
   try{
+    Process p1 = exec(new String[]{"source", sketchPath()+"mnist_venv/bin/activate"});
+    printProcessOutput(p1, "Using venv");
     p1.waitFor();
-  } catch (InterruptedException e){
+  } catch (InterruptedException | RuntimeException e){
     e.printStackTrace();
   }
-  Process p2 = exec(new String[]{"/Library/Frameworks/Python.framework/Versions/3.11/bin/pip", "install", "numpy"});
-  try{
-    p2.waitFor();
-  } catch (InterruptedException e){
-    e.printStackTrace();
-  }
+  */
   drop();
 }
 
@@ -100,8 +124,7 @@ public void draw(){
 
 public void mouseReleased(){
   drop();
-  String[] command = new String[]{"python3", sketchPath()+"/main.py"};//sketchPath()+"/main.py"}; 
-  println(command);
+  String[] command = new String[]{sketchPath()+"/mnist_venv/bin/python", sketchPath()+"/main.py"};//sketchPath()+"/main.py"}; 
   String[] ans = fetchBash(command);
   println(ans[0]);
 }

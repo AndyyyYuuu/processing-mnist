@@ -1,6 +1,6 @@
-
-import torch
 import numpy
+import torch
+
 import sys
 
 sys.stdout.write("3\n")

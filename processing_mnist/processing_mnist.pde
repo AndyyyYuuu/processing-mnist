@@ -10,14 +10,8 @@ public static String[] fetchBash(String[] command){
   }
   
   try{
-    println(process.waitFor());
-    String line;
-    BufferedReader errorReader = new BufferedReader(new InputStreamReader(process.getErrorStream()));
-    while ((line = errorReader.readLine()) != null) {
-      println(line);
-    }
-
-  } catch (InterruptedException | IOException e){
+    process.waitFor();
+  } catch (InterruptedException e){
     e.printStackTrace();
     return null;
   }

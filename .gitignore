@@ -10,4 +10,4 @@ processing_mnist/.idea/processing_mnist.iml
 processing_mnist/.idea/vcs.xml
 processing_mnist/.idea/workspace.xml
 processing_mnist/mnist_venv/*
-processing_mnist/data/*
+processing_mnist/datasets/*
